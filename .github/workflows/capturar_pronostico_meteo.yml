@@ -1,0 +1,63 @@
+name: Capturar pronóstico meteorológico (presión + viento)
+
+on:
+  workflow_dispatch:
+    inputs:
+      modelos:
+        description: 'Modelos de Open-Meteo separados por coma (vacío = ecmwf_ifs,gfs_seamless)'
+        required: false
+        default: ''
+      desde:
+        description: 'Backfill: capturar ciclos viejos desde AAAA-MM-DD (vacío = solo las últimas 48 h)'
+        required: false
+        default: ''
+      max_ciclos:
+        description: 'Tope de ciclos por modelo en esta corrida'
+        required: false
+        default: '8'
+  schedule:
+    - cron: '35 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: captura-pronostico-meteo
+  cancel-in-progress: false
+
+jobs:
+  capturar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      - name: Capturar pronóstico
+        id: cap
+        run: python capturar_pronostico_meteo.py
+        continue-on-error: true
+        env:
+          MODELOS: ${{ github.event.inputs.modelos }}
+          DESDE: ${{ github.event.inputs.desde }}
+          MAX_CICLOS: ${{ github.event.inputs.max_ciclos }}
+
+      - name: Guardar resultado en el repo
+        run: |
+          git config user.name 'pronostico-meteo-bot'
+          git config user.email 'bot@users.noreply.github.com'
+          git add data/
+          if ! git diff --staged --quiet; then
+            git commit -m 'Captura de pronóstico meteorológico'
+            git pull --rebase
+            git push
+          fi
+
+      - name: Fallar si hubo errores
+        if: steps.cap.outcome == 'failure'
+        run: exit 1

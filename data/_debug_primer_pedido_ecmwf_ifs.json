@@ -1,0 +1,73 @@
+{
+  "modelo": "ecmwf_ifs",
+  "ciclo_init": "2026-10-11T00:00:00+00:00",
+  "tipo": "lista",
+  "n_ubicaciones": 8,
+  "claves_ubicacion": [
+    "elevation",
+    "generationtime_ms",
+    "hourly",
+    "hourly_units",
+    "latitude",
+    "longitude",
+    "timezone",
+    "timezone_abbreviation",
+    "utc_offset_seconds"
+  ],
+  "latitude": -34.622143,
+  "longitude": -57.95453,
+  "generationtime_ms": 5.248546600341797,
+  "hourly_units": {
+    "time": "iso8601",
+    "pressure_msl": "hPa",
+    "wind_speed_10m": "m/s",
+    "wind_direction_10m": "°"
+  },
+  "claves_hourly": [
+    "pressure_msl",
+    "time",
+    "wind_direction_10m",
+    "wind_speed_10m"
+  ],
+  "n_horas": 120,
+  "primeras_horas": {
+    "time": [
+      "2026-10-11T00:00",
+      "2026-10-11T01:00",
+      "2026-10-11T02:00"
+    ],
+    "pressure_msl": [
+      1022.5,
+      1022.8,
+      1022.9
+    ],
+    "wind_speed_10m": [
+      6.5,
+      5.31,
+      5.17
+    ],
+    "wind_direction_10m": [
+      166,
+      171,
+      175
+    ]
+  },
+  "ultimas_horas": {
+    "time": [
+      "2026-10-15T22:00",
+      "2026-10-15T23:00"
+    ],
+    "pressure_msl": [
+      1021.3,
+      1021.9
+    ],
+    "wind_speed_10m": [
+      10.73,
+      10.91
+    ],
+    "wind_direction_10m": [
+      124,
+      123
+    ]
+  }
+}
